@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# create updater user, under whom cron job will run
+echo "Creating user...";
+sudo useradd -d /home/datim4u_auto_cert_updater -m datim4u_auto_cert_updater || true
