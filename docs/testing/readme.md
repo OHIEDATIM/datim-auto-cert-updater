@@ -1,4 +1,4 @@
-# Setup short way
+# Setup 
 0. install dependency ppas
     - `sudo add-apt-repository ppa:openhie/datim-testing && sudo add-apt-repository ppa:certbot/certbot && sudo apt-get update`
 1. install `datim4u-auto-cert-updater`

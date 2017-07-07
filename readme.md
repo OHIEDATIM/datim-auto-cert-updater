@@ -6,10 +6,4 @@ The package does two things:
 2. Setup the certificate updater program that the renewal will trigger
     - `openhim-cert-updater` package
     
-    
-    
-NOTE: this package depends on a configuration file
-- `/etc/letsencrypt/configs/ls.datim4u.org.conf` on the `ls.datim4u.org` box. 
-
-NOTE: This package requires updated nginx datim configuration file
-- which allows /.well-known to be served without SSL
+Please see [/docs/testing/readme.md](https://github.com/OHIEDATIM/datim4u-auto-cert-updater/blob/master/docs/testing/readme.md) for more info.
