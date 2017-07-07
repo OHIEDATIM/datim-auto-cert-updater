@@ -14,7 +14,7 @@
     - `cd $CERTDIR/ohim/core; rm *.deb; find $CERTDIR/datim4u-auto-cert-updater/packaging/builds -name "*.deb" -print0 | xargs --null cp -t $CERTDIR/ohim/core`
 - build it on the vagrant 
     - `cd $CERTDIR/ohim/core; vagrant ssh`
-    - `sudo apt-get -y remove datim4u-auto-cert-updater`
+    - `sudo apt-get -y purge datim4u-auto-cert-updater`
     - `find /vagrant -name "*.deb" -print0 | xargs --null  sudo dpkg -i; `
     - `sudo apt-get install -f`
         
