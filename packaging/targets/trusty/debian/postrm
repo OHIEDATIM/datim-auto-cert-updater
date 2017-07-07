@@ -2,6 +2,11 @@
 set -e
 echo "Removing user datim4u_auto_cert_updater and its home directory...";
 sudo deluser --remove-home datim4u_auto_cert_updater || true
+echo "Removing all installed files...";
+sudo rm -r /usr/share/datim4u-auto-cert-updater || true
+sudo rm -r /etc/cron.d/datim4u-auto-cert-updater || true
+sudo rm -r /etc/sudoers.d/datim4u-auto-cert-updater || true
+
 exit 0
 
 
