@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+echo "Removing user datim4u_auto_cert_updater and its home directory...";
+sudo deluser --remove-home datim4u_auto_cert_updater || true
+exit 0
+
+
