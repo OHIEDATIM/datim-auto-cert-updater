@@ -1,2 +1,3 @@
 /usr/share/datim4u-auto-cert-updater/
 /etc/cron.d/
+/etc/sudoers.d/
