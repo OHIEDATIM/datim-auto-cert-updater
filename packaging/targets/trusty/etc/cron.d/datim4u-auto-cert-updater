@@ -1,2 +1,2 @@
 # check whether cert needs updated once a day, at 3:15 AM
-15 3 * * * datim4u_auto_cert_updater /usr/share/datim4u-auto-cert-updater/check_for_renewal.sh
+15 3 * * * datim_auto_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh

@@ -5,16 +5,16 @@
 - build the pacakge
     - set GPG keys if sending to launchpad
         - e.g., `export DEB_SIGN_KEYID=F516F2E7`
-    - `cd $CERTDIR/datim4u-auto-cert-updater/packaging/; ./create_deb.sh;`
+    - `cd $CERTDIR/datim-auto-cert-updater/packaging/; ./create_deb.sh;`
         
         
 ### If using vagrant to test
 
 - move to vagrant
-    - `cd $CERTDIR/ohim/core; rm *.deb; find $CERTDIR/datim4u-auto-cert-updater/packaging/builds -name "*.deb" -print0 | xargs --null cp -t $CERTDIR/ohim/core`
+    - `cd $CERTDIR/ohim/core; rm *.deb; find $CERTDIR/datim-auto-cert-updater/packaging/builds -name "*.deb" -print0 | xargs --null cp -t $CERTDIR/ohim/core`
 - build it on the vagrant 
     - `cd $CERTDIR/ohim/core; vagrant ssh`
-    - `sudo apt-get -y purge datim4u-auto-cert-updater`
+    - `sudo apt-get -y purge datim-auto-cert-updater`
     - `find /vagrant -name "*.deb" -print0 | xargs --null  sudo dpkg -i; `
     - `sudo apt-get install -f`
         

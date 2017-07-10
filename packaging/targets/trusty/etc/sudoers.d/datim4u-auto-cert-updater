@@ -1,3 +1,0 @@
-# Enable passwordless sudo access for the datim4u_auto_cert_updater user.
-# Installed by package datim4u_auto_cert_updater
-datim4u_auto_cert_updater ALL=(ALL) NOPASSWD: /usr/share/datim4u-auto-cert-updater/check_for_renewal.sh, /bin/echo, /usr/bin/openhim-cert-updater, /usr/bin/certbot
