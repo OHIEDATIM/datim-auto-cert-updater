@@ -20,7 +20,7 @@
                     - email : `root@openhim.org`
                     - password : `openhim-password`
         - you will have to know the path and authentication information for similar user on relevant remote machines, if you want them to be "informed" on the update
-        - if you mess up durring the configuration process, start over by calling the config CLI again w/ `openhim-cert-updater -c`
+        - if you mess up durring the configuration process, start over by calling the config CLI again w/ `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -c` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater -c` and then `exit`)
 
 # Test Setup
 ensure that all has been installed correctly
@@ -36,13 +36,13 @@ ensure that all has been installed correctly
         }
     }
     ```
-2. running `sudo openhim-cert-updater` should not show any errors
+2. running `sudo -H -u openhim_cert_updater sudo openhim-cert-updater` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
-3. the `datim_auto_cert_updater` user should be able to successfuly run the `check for renewal command` 
-    - `sudo -H -u datim_auto_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` should not show any errors
+3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command` 
+    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` (or `sudo su openhim_cert_updater` and then `/usr/share/datim-auto-cert-updater/check_for_renewal.sh` and then `exit`) should not show any errors
 4. certbot should be able to successfully conduct a dry run
-    - `sudo certbot renew --renew-hook "openhim-cert-updater" -n --dry-run`
+    - `sudo certbot renew --renew-hook "sudo -H -u openhim_cert_updater sudo openhim-cert-updater -r" -n --dry-run`
     
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated

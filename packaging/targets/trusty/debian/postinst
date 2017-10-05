@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
+
 echo "Enabling execution on renewal check script...";
 sudo chmod +x /usr/share/datim-auto-cert-updater/check_for_renewal.sh
 #ls -l /usr/share/datim-auto-cert-updater/check_for_renewal.sh
 sudo service sudo restart
+
 exit 0

@@ -1,5 +1,3 @@
 #!/bin/sh
 
-# create updater user, under whom cron job will run
-echo "Creating user datim_auto_cert_updater and its home directory...";
-sudo useradd -d /home/datim_auto_cert_updater -m datim_auto_cert_updater || true
+# expect to run the cronjob under the openhim_cert_updater user

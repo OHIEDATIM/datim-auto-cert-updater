@@ -1,3 +1,21 @@
+datim-auto-cert-updater (1.0.5~trusty) trusty; urgency=medium
+
+  * Release Debian Build -1.0.5.
+
+ -- Ulad Kasach <uladkasach@gmail.com>  Fri, 28 Jul 2017 16:34:13 -0400
+
+datim-auto-cert-updater (1.0.4~trusty) trusty; urgency=medium
+
+  * Release Debian Build -1.0.4.
+
+ -- Ulad Kasach <uladkasach@gmail.com>  Fri, 28 Jul 2017 15:26:31 -0400
+
+datim-auto-cert-updater (1.0.3~trusty) trusty; urgency=medium
+
+  * Release Debian Build -1.0.3.
+
+ -- Ulad Kasach <uladkasach@gmail.com>  Thu, 20 Jul 2017 15:17:50 -0400
+
 datim-auto-cert-updater (1.0.2~trusty) trusty; urgency=medium
 
   * Release Debian Build -1.0.2.

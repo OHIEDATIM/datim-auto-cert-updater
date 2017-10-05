@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-echo "Removing user datim_auto_cert_updater and its home directory...";
-sudo deluser --remove-home datim_auto_cert_updater || true
 
 # this is taken care of automatically when `purge` is run instead of `remove`
 #echo "Removing all installed files...";
