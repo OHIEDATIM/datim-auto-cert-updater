@@ -1,15 +1,18 @@
-# Setup 
+# Setup
 0. install dependency ppas
     - `sudo add-apt-repository ppa:openhie/datim-testing && sudo add-apt-repository ppa:certbot/certbot && sudo apt-get update`
 1. install `datim-auto-cert-updater`
     - `sudo apt-get install datim-auto-cert-updater`
-2. install dependencies 
+2. install dependencies
     - `sudo apt-get install -f`
-    - note, this will include configuring `openhim-cert-updater`. 
-        - you will have to find where the cert and privkey for openhim / from certbot are stored 
-            - on ls.datim4u.org this is located at 
+    - note, this will include configuring `openhim-cert-updater`.
+        - you will have to find where the cert and privkey for openhim / from certbot are stored
+            - on ls.datim4u.org this is located at
                 - cert : `/etc/letsencrypt/live/ls.datim4u.org/fullchain.pem`
                 - key : `/etc/letsencrypt/live/ls.datim4u.org/privkey.pem`
+            - on cert.test.ohie.org this is located at
+                - cert : `/etc/letsencrypt/live/cert.test.ohie.org/fullchain.pem`
+                - key : `/etc/letsencrypt/live/cert.test.ohie.org/privkey.pem`
             - on a machine w/ certs created by `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ohim-selfsigned.key -out /etc/ssl/certs/ohim-selfsigned.crt`
                 - cert : `/etc/ssl/certs/ohim-selfsigned.crt`
                 - key : `/etc/ssl/private/ohim-selfsigned.key`
@@ -21,6 +24,7 @@
                     - password : `openhim-password`
         - you will have to know the path and authentication information for similar user on relevant remote machines, if you want them to be "informed" on the update
         - if you mess up durring the configuration process, start over by calling the config CLI again w/ `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -c` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater -c` and then `exit`)
+        - to review the configuration file, run `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -c -m`
 
 # Test Setup
 ensure that all has been installed correctly
@@ -39,29 +43,30 @@ ensure that all has been installed correctly
 2. running `sudo -H -u openhim_cert_updater sudo openhim-cert-updater` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
-3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command` 
+3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`
     - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` (or `sudo su openhim_cert_updater` and then `/usr/share/datim-auto-cert-updater/check_for_renewal.sh` and then `exit`) should not show any errors
 4. certbot should be able to successfully conduct a dry run
     - `sudo certbot renew --renew-hook "sudo -H -u openhim_cert_updater sudo openhim-cert-updater -r" -n --dry-run`
-    
+
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
 1. force certificate update
     - `sudo certbot renew -n --force-renew`
     - this command should return a sucessful response
 2. manually trigger openhim-cert-updater
-    - `sudo openhim-cert-updater`
+    - `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -l -h '/usr/share/datim-auto-cert-updater/restart_mediators_post_update.sh'`
     - this command should respond stating that the local machine and all remote machines were updated
+    - if certs were not equal, it will have also run the hook
 3. manually check openhim machines, through openhim-console, to ensure that certificates were indeed updated
 
 # Test Cronjob
 This will entail reading logs and waiting untill 30 days untill expiration date of the next certificate
-The two following log files will contain timestamps for when the certificate renewal command was run and for when the openhim-cert-updater command was run: 
+The two following log files will contain timestamps for when the certificate renewal command was run and for when the openhim-cert-updater command was run:
 - cat renewal check log : `cat /home/datim_auto_cert_updater/run.log`
 - cat openhim-cert-updater log : `cat /usr/share/openhim-cert-updater/run.log`
 
 The renewal check log should produce a timestamp at the interval defined by the cronjob. Every time the cron task is run, a timestamp will be generated here. The `openhim-cert-updater` log should produce a timestamp only when it has been triggered by a certificate update (from the `certbot --renewal-hook`) (or when a user manually caslls `openhim-cert-updater -r`) (if the file does not exist, that means `openhim-cert-updater -r` has not been run, i.e., a certificate renewal has not been triggered )
 
-Summary: 
+Summary:
 - ensure that there is a timestamp in `/home/datim_auto_cert_updater/run.log` at the cronjob intervals
 - ensure that there is a timestamp in `/usr/share/openhim-cert-updater/run.log` for when the certificate would have been renewed (30 days before expiration date)
