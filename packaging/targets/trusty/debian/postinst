@@ -1,8 +1,9 @@
 #!/bin/sh
 set -e
 
-echo "Enabling execution on renewal check script...";
+#echo "Enabling execution on renewal check script...";
 sudo chmod +x /usr/share/datim-auto-cert-updater/check_for_renewal.sh
+sudo chmod +x /usr/share/datim-auto-cert-updater/update_openhim_post_renewal.sh
 sudo chmod +x /usr/share/datim-auto-cert-updater/restart_mediators_post_update.sh
 #ls -l /usr/share/datim-auto-cert-updater/check_for_renewal.sh
 sudo service sudo restart

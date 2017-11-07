@@ -42,31 +42,42 @@ ensure that all has been installed correctly
     ```
 2. running `sudo -H -u openhim_cert_updater sudo openhim-cert-updater` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
-    - note, an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
+    - note, if an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
 3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`
-    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` (or `sudo su openhim_cert_updater` and then `/usr/share/datim-auto-cert-updater/check_for_renewal.sh` and then `exit`) should not show any errors
+    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` should not show any errors
+        - additionally, you should find a log entry for the run under `/home/openhim_cert_updater/`
+             - `cat /home/openhim_cert_updater/run.log`
 4. certbot should be able to successfully conduct a dry run
-    - `sudo certbot renew --renew-hook "sudo -H -u openhim_cert_updater sudo openhim-cert-updater -r" -n --dry-run`
+    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh --dry-run`
 
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
+0. ensure that `watchFSforCert` is disabled
+    - check the config file `/etc/openhim/config.json` and ensure `"watchFSForCert": false,`
+        - `sudo nano /etc/openhim/config.json`
+    - if you needed to modify the default value, you must now restart openhim-core
+        - `sudo restart openhim-core`
 1. force certificate update
     - `sudo certbot renew -n --force-renew`
     - this command should return a sucessful response
 2. manually trigger openhim-cert-updater
-    - `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -l -h '/usr/share/datim-auto-cert-updater/restart_mediators_post_update.sh'`
-    - this command should respond stating that the local machine and all remote machines were updated
-    - if certs were not equal, it will have also run the hook
+    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/update_openhim_post_renewal.sh`
+        - this command should respond stating that the local machine and all remote machines were updated
+        - if certs were not equal, it will have also run the hook
+        - check the logs to ensure all was sucessful
+            - `cat /home/openhim_cert_updater/run.log`
 3. manually check openhim machines, through openhim-console, to ensure that certificates were indeed updated
 
 # Test Cronjob
 This will entail reading logs and waiting untill 30 days untill expiration date of the next certificate
 The two following log files will contain timestamps for when the certificate renewal command was run and for when the openhim-cert-updater command was run:
-- cat renewal check log : `cat /home/datim_auto_cert_updater/run.log`
+- cat renewal check log : `cat /home/openhim_cert_updater/run.log`
 - cat openhim-cert-updater log : `cat /usr/share/openhim-cert-updater/run.log`
 
 The renewal check log should produce a timestamp at the interval defined by the cronjob. Every time the cron task is run, a timestamp will be generated here. The `openhim-cert-updater` log should produce a timestamp only when it has been triggered by a certificate update (from the `certbot --renewal-hook`) (or when a user manually caslls `openhim-cert-updater -r`) (if the file does not exist, that means `openhim-cert-updater -r` has not been run, i.e., a certificate renewal has not been triggered )
 
 Summary:
-- ensure that there is a timestamp in `/home/datim_auto_cert_updater/run.log` at the cronjob intervals
+- ensure that there is a timestamp in `/home/openhim_cert_updater/run.log` at the cronjob intervals
+     - `cat /home/openhim_cert_updater/run.log`
 - ensure that there is a timestamp in `/usr/share/openhim-cert-updater/run.log` for when the certificate would have been renewed (30 days before expiration date)
+    - `cat /usr/share/openhim-cert-updater/run.log`

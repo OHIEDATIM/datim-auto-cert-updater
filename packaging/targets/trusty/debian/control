@@ -10,4 +10,4 @@ Architecture: amd64
 Depends: openhim-cert-updater, nginx-datim, python-certbot-nginx
 Recommends: build-essential, libkrb5-dev
 Description: Datim Certificate Renewal and Update Manager
- creates a cronjob that checks whether certificate is about to expire, triggers openhim-cert-updater if certificate is renewed
+ creates a cronjob that checks whether certificate is about to expire, triggers openhim-cert-updater if certificate is renewed, and restarts mediators upon successful openhim update
