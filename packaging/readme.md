@@ -33,7 +33,7 @@ Where trusty can be anay ubuntu build, the `debian` directory contains the regul
     2. csp over to target
         e.g.:
             -  `scp $DEBPATH uladkasach@ls.datim4u.org:/home/uladkasach`
-            -  `scp $DEBPATH root@cert.test.ohie.org:/root`
+            -  `scp $DEBPATH root@cert.eval.ohie.org:/root`
 
     3. install
         - `dpkg -i ...`

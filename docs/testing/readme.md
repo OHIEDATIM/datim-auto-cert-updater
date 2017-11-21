@@ -49,6 +49,8 @@ ensure that all has been installed correctly
              - `cat /home/openhim_cert_updater/run.log`
 4. certbot should be able to successfully conduct a dry run
     - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/check_for_renewal.sh --dry-run"`
+5. openhim-cert-updater user should be able to restart nginx and mediators successfully
+    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/restart_dependencies_post_update.sh"` should succeed
 
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
@@ -61,8 +63,8 @@ ensure that when certificate is updated, local machine and all relevant remote m
     - `sudo certbot renew -n --force-renew`
     - this command should return a sucessful response
 2. manually trigger openhim-cert-updater
-    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/update_openhim_post_renewal.sh"`
-        - this command should respond stating that the local machine and all remote machines were updated
+    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/update_dependencies_post_renewal.sh"`
+        - this command should respond stating that the local machine and all remote machines were updated and that nginx was restarted
         - if certs were not equal, it will have also run the hook
         - check the logs to ensure all was sucessful
             - `cat /home/openhim_cert_updater/run.log`
