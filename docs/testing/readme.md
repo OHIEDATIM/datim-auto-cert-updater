@@ -1,6 +1,6 @@
 # Setup
 0. install dependency ppas
-    - `sudo add-apt-repository ppa:openhie/datim-testing && sudo add-apt-repository ppa:certbot/certbot && sudo apt-get update`
+    - `sudo add-apt-repository ppa:openhie/datim && sudo add-apt-repository ppa:certbot/certbot && sudo apt-get update`
 1. install `datim-auto-cert-updater`
     - `sudo apt-get install datim-auto-cert-updater`
 2. install dependencies
@@ -23,8 +23,8 @@
                     - email : `root@openhim.org`
                     - password : `openhim-password`
         - you will have to know the path and authentication information for similar user on relevant remote machines, if you want them to be "informed" on the update
-        - if you mess up durring the configuration process, start over by calling the config CLI again w/ `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -c` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater -c` and then `exit`)
-        - to review the configuration file, run `sudo -H -u openhim_cert_updater sudo openhim-cert-updater -c -m`
+        - if you mess up durring the configuration process, start over by calling the config CLI again w/ `sudo su openhim_cert_updater -c "openhim-cert-updater -c"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater -c` and then `exit`)
+        - to review the configuration file, run `sudo su openhim_cert_updater -c "openhim-cert-updater -c -m"`
 
 # Test Setup
 ensure that all has been installed correctly
@@ -40,15 +40,15 @@ ensure that all has been installed correctly
         }
     }
     ```
-2. running `sudo -H -u openhim_cert_updater sudo openhim-cert-updater` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
+2. running `sudo su openhim_cert_updater -c "openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, if an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
 3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`
-    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh` should not show any errors
+    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/check_for_renewal.sh"` should not show any errors
         - additionally, you should find a log entry for the run under `/home/openhim_cert_updater/`
              - `cat /home/openhim_cert_updater/run.log`
 4. certbot should be able to successfully conduct a dry run
-    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/check_for_renewal.sh --dry-run`
+    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/check_for_renewal.sh --dry-run"`
 
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
@@ -61,7 +61,7 @@ ensure that when certificate is updated, local machine and all relevant remote m
     - `sudo certbot renew -n --force-renew`
     - this command should return a sucessful response
 2. manually trigger openhim-cert-updater
-    - `sudo -H -u openhim_cert_updater /usr/share/datim-auto-cert-updater/update_openhim_post_renewal.sh`
+    - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/update_openhim_post_renewal.sh"`
         - this command should respond stating that the local machine and all remote machines were updated
         - if certs were not equal, it will have also run the hook
         - check the logs to ensure all was sucessful

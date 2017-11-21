@@ -2,7 +2,6 @@
 # Exit on error
 set -e
 
-
 PACKAGINGHOME=`pwd`
 AWK=/usr/bin/awk
 HEAD=/usr/bin/head
@@ -15,9 +14,11 @@ TARGETS=(*)
 echo "Targets: $TARGETS"
 cd $PACKAGINGHOME
 
+## Define Package Title
+PKG="datim-auto-cert-updater"
 
-PKG="datim4u-auto-cert-updater"
 
+## Query user for input
 echo -n "Would you like to upload the build(s) to Launchpad? [y/N] "
 read UPLOAD
 if [[ "$UPLOAD" == "y" || "$UPLOAD" == "Y" ]];  then
@@ -44,23 +45,25 @@ if [[ "$UPLOAD" == "y" || "$UPLOAD" == "Y" ]];  then
     read PPA
 fi
 
-
+## clean packaging directory
 BUILDDIR=$PACKAGINGHOME/builds
 echo -n "Clearing out previous builds... "
 rm -rf $BUILDDIR
 echo "Done."
 
+
 for TARGET in "${TARGETS[@]}"
 do
     TARGETDIR=$PACKAGINGHOME/targets/$TARGET
-    
+
     ## Get current build
     RLS=`$HEAD -1 $TARGETDIR/debian/changelog | $AWK '{print $2}' | $AWK -F~ '{print $1}' | $AWK -F\( '{print $2}'`
     BUILDNO=$RLS
 
     echo "Would you like to increment the build number? [y/N] ";
     read BOOLNEWBUILD
-    
+
+    ## update changelog if requested
     if [[ "$BOOLNEWBUILD" == "y" || "$BOOLNEWBUILD" == "Y" ]]; then
         ## Define next build number
         echo "Last build number is $RLS"
@@ -94,11 +97,13 @@ do
     	DPKGCMD="debuild -k${DEB_SIGN_KEYID} -S -sa"
         echo "$DPKGCMD"
         $DPKGCMD
-        
+
+        dir ..
+
     	DPUTCMD="dput ppa:$LAUNCHPADPPALOGIN/$PPA ../${BUILD}_source.changes"
         echo "$DPUTCMD"
     	$DPUTCMD
-    else 
+    else
         DPKGCMD="debuild -uc -us"
         $DPKGCMD
     fi
