@@ -40,7 +40,7 @@ ensure that all has been installed correctly
         }
     }
     ```
-2. running `sudo su openhim_cert_updater -c "openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
+2. running `sudo su openhim_cert_updater -c "sudo openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, if an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
 3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`

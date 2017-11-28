@@ -1,3 +1,3 @@
 # Enable passwordless sudo access for the openhim_cert_updater user for datim-auto-cert-updater package
 # Installed by package datim_auto_cert_updater
-openhim_cert_updater ALL=(ALL) NOPASSWD: /usr/share/datim-auto-cert-updater/check_for_renewal.sh, /usr/share/datim-auto-cert-updater/restart_dependencies_post_update.sh, /usr/share/datim-auto-cert-updater/update_dependencies_post_renewal.sh, /etc/init.d/nginx, /bin/echo, /usr/bin/certbot
+openhim_cert_updater ALL=(ALL) NOPASSWD: /usr/share/datim-auto-cert-updater/check_for_renewal.sh, /usr/share/datim-auto-cert-updater/restart_dependencies_post_update.sh, /usr/share/datim-auto-cert-updater/update_dependencies_post_renewal.sh, /etc/init.d/nginx, /bin/echo, /usr/bin/certbot, /sbin/restart openhim-mediator-datim, /sbin/restart openhim-mediator-file-queue, /sbin/restart openhim-mediator-openinfoman-dhis2-sync, /sbin/restart openhim-mediator-shell-script
