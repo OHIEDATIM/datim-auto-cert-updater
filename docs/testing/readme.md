@@ -9,10 +9,12 @@
 
 #### From Source
 0. Download `.deb` files
-    - `wget tbd`
+    - `wget https://github.com/uladkasach/openhim-cert-updater/releases/download/v1.2.8/openhim-cert-updater_1.2.8.trusty_amd64.deb`
+    - `wget https://github.com/OHIEDATIM/datim-auto-cert-updater/releases/download/v1.1.4/datim-auto-cert-updater_1.1.4.trusty_amd64.deb`
 1. Install deb files
-    - `sudo dpkg -i ...`
-3. Install dependencies
+    - `sudo dpkg -i openhim-cert-updater_1.2.8.trusty_amd64.deb`
+    - `sudo dpkg -i datim-auto-cert-updater_1.1.4.trusty_amd64.deb`
+3. Install further dependencies
     - `sudo apt-get install -f`
 
 # Configuration
