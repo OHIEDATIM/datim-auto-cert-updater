@@ -1,30 +1,51 @@
-# Setup
+# Installation
+#### From PPA
 0. install dependency ppas
     - `sudo add-apt-repository ppa:openhie/datim && sudo add-apt-repository ppa:certbot/certbot && sudo apt-get update`
 1. install `datim-auto-cert-updater`
     - `sudo apt-get install datim-auto-cert-updater`
 2. install dependencies
     - `sudo apt-get install -f`
-    - note, this will include configuring `openhim-cert-updater`.
-        - you will have to find where the cert and privkey for openhim / from certbot are stored
-            - on ls.datim4u.org this is located at
-                - cert : `/etc/letsencrypt/live/ls.datim4u.org/fullchain.pem`
-                - key : `/etc/letsencrypt/live/ls.datim4u.org/privkey.pem`
-            - on cert.test.ohie.org this is located at
-                - cert : `/etc/letsencrypt/live/cert.test.ohie.org/fullchain.pem`
-                - key : `/etc/letsencrypt/live/cert.test.ohie.org/privkey.pem`
-            - on a machine w/ certs created by `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ohim-selfsigned.key -out /etc/ssl/certs/ohim-selfsigned.crt`
-                - cert : `/etc/ssl/certs/ohim-selfsigned.crt`
-                - key : `/etc/ssl/private/ohim-selfsigned.key`
-        - you will have to know the localhost path and authentication information (email and password) for a user w/ permissions to update the certificate on the local machine
-            - on a default installation:
-                - host : `localhost:8080`
-                - root user  
-                    - email : `root@openhim.org`
-                    - password : `openhim-password`
-        - you will have to know the path and authentication information for similar user on relevant remote machines, if you want them to be "informed" on the update
-        - if you mess up durring the configuration process, start over by calling the config CLI again w/ `sudo su openhim_cert_updater -c "openhim-cert-updater -c"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater -c` and then `exit`)
-        - to review the configuration file, run `sudo su openhim_cert_updater -c "openhim-cert-updater -c -m"`
+
+#### From Source
+0. Download `.deb` files
+    - `wget tbd`
+1. Install deb files
+    - `sudo dpkg -i ...`
+3. Install dependencies
+    - `sudo apt-get install -f`
+
+# Configuration
+3. create users for `openhim-cert-updater` on local and remote machines
+    - we need credentials which will enable this utility to gain authorized access to the openhim apis on both the local and remote machines
+3. configure `openhim-cert-updater`
+    - run `openhim-cert-updater -c` for details
+    - run `openhim-cert-updater -c -o` and modify the configuration file
+    - example configuration
+        ```
+        {
+            "paths": {
+                "cert": "/etc/letsencrypt/live/ls.datim4u.org/fullchain.pem",
+                "key": "/etc/letsencrypt/live/ls.datim4u.org/privkey.pem"
+            },
+            "machines": {
+                "local": "localhost:5008",
+                "remote": [
+                    "test2-global-ohie.datim.org:5008"
+                ]
+            },
+            "users": {
+                "localhost:5008": {
+                    "email": email_for_cert_updater_user_on_ls,
+                    "password": password_for_cert_updater_user_on_ls
+                },
+                "test2-global-ohie.datim.org:5008": {
+                    "email": email_for_cert_updater_user_on_test2,
+                    "password": password_for_cert_updater_user_on_test2
+                }
+            }
+        }
+        ```
 
 # Test Setup
 ensure that all has been installed correctly
@@ -68,7 +89,11 @@ ensure that when certificate is updated, local machine and all relevant remote m
         - if certs were not equal, it will have also run the hook
         - check the logs to ensure all was sucessful
             - `cat /home/openhim_cert_updater/run.log`
-3. manually check openhim machines, through openhim-console, to ensure that certificates were indeed updated
+3. manually check openhim machines, through openhim-console, to ensure that:
+    - certificates were indeed updated
+        - compare the begin and end time on the local and remote machines
+    - clients were indeed updated
+        - ensure that remote clients reference the correct certificate
 
 # Test Cronjob
 This will entail reading logs and waiting untill 30 days untill expiration date of the next certificate
