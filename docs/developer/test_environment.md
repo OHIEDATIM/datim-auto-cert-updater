@@ -12,4 +12,6 @@ Note: this file is "under construction". It should contain instructions on setti
         - run install w/ test input
             - `sudo /usr/share/datim4u-ohie/install.sh --use-test-input --skip-mech --skip-oim --skip-etc`
 
-### for installing the package in test environment, see `readme.md` under packaging
+### Installation
+- for dev testing, see `readme.md` under packaging
+- for implementation testing, see main readme of repository

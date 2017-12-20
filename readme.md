@@ -18,10 +18,10 @@ The package:
 
 #### From Source
 0. Download `.deb` files
-    - `wget https://github.com/uladkasach/openhim-cert-updater/releases/download/v1.2.8/openhim-cert-updater_1.2.8.trusty_amd64.deb`
+    - `wget https://github.com/uladkasach/openhim-cert-updater/releases/download/v1.2.9/openhim-cert-updater_1.2.9.trusty_amd64.deb`
     - `wget https://github.com/OHIEDATIM/datim-auto-cert-updater/releases/download/v1.1.4/datim-auto-cert-updater_1.1.4.trusty_amd64.deb`
 1. Install deb files
-    - `sudo dpkg -i openhim-cert-updater_1.2.8.trusty_amd64.deb`
+    - `sudo dpkg -i openhim-cert-updater_1.2.9.trusty_amd64.deb`
     - `sudo dpkg -i datim-auto-cert-updater_1.1.4.trusty_amd64.deb`
 3. Install further dependencies
     - `sudo apt-get install -f`
@@ -45,6 +45,10 @@ The package:
                     "test2-global-ohie.datim.org:5008"
                 ]
             },
+            "clients":{
+                "localhost:5008" : [],
+                "test2-global-ohie.datim.org:5008" : ["lsohiestack"]
+            },
             "users": {
                 "localhost:5008": {
                     "email": email_for_cert_updater_user_on_ls,
@@ -58,8 +62,8 @@ The package:
         }
         ```
 
-# Test Setup
-ensure that all has been installed correctly
+# Environment Check
+Ensure environment is set up correctly
 1.  `cat /etc/nginx/sites-available/datim` should display the following at the top:
     ```
     server{
@@ -72,16 +76,22 @@ ensure that all has been installed correctly
         }
     }
     ```
-2. running `sudo su openhim_cert_updater -c "sudo openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
+2. check to make sure that updating client certificates manually does not cause errors
+    - per issue https://github.com/pepfar-datim/DATIM4U/issues/457
+    - see comments for work-arounds if this scenario exists
+
+# Test Setup
+ensure that all has been installed correctly
+0. running `sudo su openhim_cert_updater -c "sudo openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, if an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
-3. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`
+1. the `openhim_cert_updater` user should be able to successfuly run the `check for renewal command`
     - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/check_for_renewal.sh"` should not show any errors
         - additionally, you should find a log entry for the run under `/home/openhim_cert_updater/`
              - `cat /home/openhim_cert_updater/run.log`
-4. certbot should be able to successfully conduct a dry run
+2. certbot should be able to successfully conduct a dry run
     - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/check_for_renewal.sh --dry-run"`
-5. openhim-cert-updater user should be able to restart nginx and mediators successfully
+3. openhim-cert-updater user should be able to restart nginx and mediators successfully
     - `sudo su openhim_cert_updater -c "/usr/share/datim-auto-cert-updater/restart_dependencies_post_update.sh"` should succeed
 
 # Test Cert Renewal
