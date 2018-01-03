@@ -99,7 +99,7 @@ ensure that all has been installed correctly
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
 
 0. ensure that `watchFSforCert` is disabled
-    - check the config file `/etc/openhim/config.json` and ensure `"watchFSForCert": false,`
+    - check the config file `/etc/openhim/config.json` and ensure that `"watchFSForCert": false,` or  that`"watchFSForCert"` does not exist in the config options
         - `sudo nano /etc/openhim/config.json`
     - if you needed to modify the default value, you must now restart openhim-core
         - `sudo restart openhim-core`
