@@ -7,6 +7,35 @@ The package:
     - the `openhim-cert-updater` is used for part of this
 
 
+
+# Environment Check
+Ensure environment is set up correctly
+1.  `cat /etc/nginx/sites-available/datim` should display the following at the top:
+    ```
+    server{
+        listen 80;
+        location /.well-known {
+            root /usr/share/nginx/html;
+        }
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+    ```
+    - if it does not, the `nginx-datim` package is not up to date.
+3. Please make sure that nginx will look for certificates in the location that letsencrypt will place them. `cat /etc/nginx/sites-available/datim` should contain something similar to the following, where `HOST_NAME` is replaced with the DNS name of the server:
+    ```
+    listen 443 ssl;
+	## SSL config Options
+	# Replace the follwing two lines with the path to your ssl certificate and key
+	ssl_certificate /etc/letsencrypt/live/HOST_NAME/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/HOST_NAME/privkey.pem;
+    ```
+2. check to make sure that updating client certificates manually does not cause errors
+    - per issue https://github.com/pepfar-datim/DATIM4U/issues/457
+    - see comments for work-arounds if this scenario exists
+
+
 # Installation
 #### From PPA
 0. install dependency ppas
@@ -23,12 +52,14 @@ The package:
 1. Install deb files
     - `sudo dpkg -i openhim-cert-updater_1.2.9.trusty_amd64.deb`
     - `sudo dpkg -i datim-auto-cert-updater_1.1.4.trusty_amd64.deb`
+        - it may give you a warning that dependencies are not installed, the next step takes care of this
 3. Install further dependencies
     - `sudo apt-get install -f`
 
 # Configuration
 3. create users for `openhim-cert-updater` on local and remote machines
     - we need credentials which will enable this utility to gain authorized access to the openhim apis on both the local and remote machines
+        - This can be completed under the users tab of an openhim client interface
 3. configure `openhim-cert-updater`
     - run `openhim-cert-updater -c` for details
     - run `openhim-cert-updater -c -o` and modify the configuration file
@@ -61,24 +92,6 @@ The package:
             }
         }
         ```
-
-# Environment Check
-Ensure environment is set up correctly
-1.  `cat /etc/nginx/sites-available/datim` should display the following at the top:
-    ```
-    server{
-        listen 80;
-        location /.well-known {
-            root /usr/share/nginx/html;
-        }
-        location / {
-            return 301 https://$host$request_uri;
-        }
-    }
-    ```
-2. check to make sure that updating client certificates manually does not cause errors
-    - per issue https://github.com/pepfar-datim/DATIM4U/issues/457
-    - see comments for work-arounds if this scenario exists
 
 # Test Setup
 ensure that all has been installed correctly
