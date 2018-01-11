@@ -95,6 +95,7 @@ Ensure environment is set up correctly
 
 # Test Setup
 ensure that all has been installed correctly
+
 0. running `sudo su openhim_cert_updater -c "sudo openhim-cert-updater"` (or `sudo su openhim_cert_updater` and then `sudo openhim-cert-updater` and then `exit`) should not show any errors
     - this checks that the `openhim-cert-updater` installation and configuration suceeded
     - note, if an error displays along the lines of `Error: ENOENT: no such file or directory, open '/etc/ssl/certs/ohim-selfsigned.crt'`, ensure that there exists a certificate at the path.
@@ -109,8 +110,9 @@ ensure that all has been installed correctly
 
 # Test Cert Renewal
 ensure that when certificate is updated, local machine and all relevant remote machines are updated
+
 0. ensure that `watchFSforCert` is disabled
-    - check the config file `/etc/openhim/config.json` and ensure `"watchFSForCert": false,`
+    - check the config file `/etc/openhim/config.json` and ensure that `"watchFSForCert": false,` or  that`"watchFSForCert"` does not exist in the config options
         - `sudo nano /etc/openhim/config.json`
     - if you needed to modify the default value, you must now restart openhim-core
         - `sudo restart openhim-core`
@@ -131,6 +133,7 @@ ensure that when certificate is updated, local machine and all relevant remote m
 
 # Test Cronjob
 This will entail reading logs and waiting untill 30 days untill expiration date of the next certificate
+
 The two following log files will contain timestamps for when the certificate renewal command was run and for when the openhim-cert-updater command was run:
 - cat renewal check log : `cat /home/openhim_cert_updater/run.log`
 - cat openhim-cert-updater log : `cat /usr/share/openhim-cert-updater/run.log`
