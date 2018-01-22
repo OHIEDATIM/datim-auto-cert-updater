@@ -1,0 +1,26 @@
+{
+    "paths": {
+        "cert": "/etc/letsencrypt/live/ls.datim4u.org/fullchain.pem",
+        "key": "/etc/letsencrypt/live/ls.datim4u.org/privkey.pem"
+    },
+    "machines": {
+        "local": "localhost:5008",
+        "remote": [
+            "test2-global-ohie.datim.org:5008"
+        ]
+    },
+    "clients":{
+        "localhost:5008" : [],
+        "test2-global-ohie.datim.org:5008" : ["lsohiestack"]
+    },
+    "users": {
+        "localhost:5008": {
+            "email": "uladkasach@gmail.com",
+            "password": REDACTED
+        },
+        "test2-global-ohie.datim.org:5008": {
+            "email": "Uladkasach@gmail.com",
+            "password": REDACTED
+        }
+    }
+}
